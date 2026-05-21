@@ -419,52 +419,75 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
             </div>
           ) : activeTab === 'pastWorks' ? (
             <div className="space-y-4">
-              {(editedContent.pastWorks || []).map((work) => (
-                <div key={work.id} className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 group">
-                  <div className="flex flex-col md:flex-row gap-8">
-                    <div className="flex-1 space-y-6">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Project Name / Title</label>
-                          <input 
-                            className="w-full text-base font-bold bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
-                            placeholder="Ex: Basement Waterproofing"
-                            value={work.title}
-                            onChange={(e) => handlePastWorkChange(work.id, 'title', e.target.value)}
-                          />
+              {(editedContent.pastWorks || []).map((work) => {
+                const isFeaturedHero = work.id === 'p5';
+                return (
+                  <div 
+                    key={work.id} 
+                    className={`p-8 rounded-[2rem] border transition-all duration-300 group ${
+                      isFeaturedHero 
+                        ? 'bg-accent/[0.02] border-accent/30 shadow-lg shadow-accent/[0.01]' 
+                        : 'bg-slate-50 border-slate-100'
+                    }`}
+                  >
+                    {isFeaturedHero && (
+                      <div className="bg-accent/10 border border-accent/20 rounded-2xl px-5 py-3 mb-6 flex items-center gap-3 text-accent text-xs font-extrabold uppercase tracking-widest">
+                        <Home size={14} />
+                        Featured Hero Section Card (Visible on Landing Page)
+                      </div>
+                    )}
+                    <div className="flex flex-col md:flex-row gap-8">
+                      <div className="flex-1 space-y-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Project Name / Title</label>
+                            <input 
+                              className="w-full text-base font-bold bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
+                              placeholder="Ex: Basement Waterproofing"
+                              value={work.title}
+                              onChange={(e) => handlePastWorkChange(work.id, 'title', e.target.value)}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Category</label>
+                            <input 
+                              className="w-full text-base font-bold bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
+                              placeholder="Ex: Structural Protection"
+                              value={work.category}
+                              onChange={(e) => handlePastWorkChange(work.id, 'category', e.target.value)}
+                            />
+                          </div>
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Category</label>
+                          <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Project Image URL</label>
                           <input 
-                            className="w-full text-base font-bold bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
-                            placeholder="Ex: Structural Protection"
-                            value={work.category}
-                            onChange={(e) => handlePastWorkChange(work.id, 'category', e.target.value)}
+                            type="text"
+                            className="w-full text-xs font-bold text-slate-400 bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
+                            placeholder="Image URL..."
+                            value={work.imageUrl}
+                            onChange={(e) => handlePastWorkChange(work.id, 'imageUrl', e.target.value)}
                           />
                         </div>
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 ml-1">Project Image URL</label>
-                        <input 
-                          type="text"
-                          className="w-full text-xs font-bold text-slate-400 bg-white border border-slate-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
-                          placeholder="Image URL..."
-                          value={work.imageUrl}
-                          onChange={(e) => handlePastWorkChange(work.id, 'imageUrl', e.target.value)}
-                        />
+                      <div className="flex flex-col justify-center items-end">
+                        {isFeaturedHero ? (
+                          <div className="text-[9px] font-extrabold text-accent uppercase tracking-widest bg-accent/10 border border-accent/20 px-4 py-2.5 rounded-xl text-center select-none">
+                            Locked Core Asset
+                          </div>
+                        ) : (
+                          <button 
+                            type="button"
+                            onClick={() => handleRemovePastWork(work.id)}
+                            className="p-5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
+                          >
+                            <Trash2 size={24} />
+                          </button>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex flex-col justify-center items-end">
-                      <button 
-                        onClick={() => handleRemovePastWork(work.id)}
-                        className="p-5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
-                      >
-                        <Trash2 size={24} />
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               <button 
                 onClick={handleAddPastWork}
                 className="w-full py-12 border-2 border-dashed border-slate-200 rounded-[2.5rem] text-slate-400 hover:border-accent/40 hover:text-accent font-extrabold flex items-center justify-center gap-3 transition-all bg-slate-50/50 hover:bg-accent/5"
