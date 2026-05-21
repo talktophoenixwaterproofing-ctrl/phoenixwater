@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth, isDummy } from '../lib/firebase';
 import { SiteContent } from '../types';
+import { INITIAL_CONTENT } from '../constants';
 
 export enum OperationType {
   CREATE = 'create',
@@ -51,13 +52,28 @@ function handleFirestoreError(error: any, operationType: OperationType, path: st
 const CONTENT_PATH = 'content/site';
 const STORAGE_KEY = 'phoenix_waterproofing_site_content';
 
-function getLocalContent(): SiteContent | null {
+function getLocalContent(): SiteContent {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : null;
+    if (data) {
+      const parsed = JSON.parse(data);
+      // Clean merge to prevent schema drift crashes
+      return {
+        ...INITIAL_CONTENT,
+        ...parsed,
+        businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(parsed.businessInfo || {}) },
+        seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
+        services: parsed.services || INITIAL_CONTENT.services,
+        pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
+        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+      };
+    }
+    // Seed localStorage on very first visit
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_CONTENT));
+    return INITIAL_CONTENT;
   } catch (e) {
     console.warn('LocalStorage is unavailable:', e);
-    return null;
+    return INITIAL_CONTENT;
   }
 }
 
