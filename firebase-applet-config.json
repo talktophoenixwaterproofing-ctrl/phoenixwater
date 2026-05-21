@@ -1,0 +1,9 @@
+{
+  "apiKey": "dummy-api-key-for-local-build-only",
+  "authDomain": "phoenix-waterproofing.firebaseapp.com",
+  "projectId": "phoenix-waterproofing",
+  "storageBucket": "phoenix-waterproofing.appspot.com",
+  "messagingSenderId": "1234567890",
+  "appId": "1:1234567890:web:abcdef123456",
+  "firestoreDatabaseId": "(default)"
+}

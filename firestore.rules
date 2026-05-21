@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- PRIMITIVES ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      // Bootstrapping the provided user email as admin
+      return isEmailVerified() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) || 
+        request.auth.token.email == "sharangoshreddy@gmail.com"
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // --- VALIDATION HELPERS ---
+    function isValidSiteContent(data) {
+      return data.keys().hasAll(['businessInfo', 'services', 'seo']) &&
+             data.keys().size() == 3 &&
+             data.businessInfo is map &&
+             data.businessInfo.name is string && data.businessInfo.name.size() <= 200 &&
+             data.businessInfo.address is string && data.businessInfo.address.size() <= 1000 &&
+             data.businessInfo.email is string && data.businessInfo.email.size() <= 200 &&
+             data.businessInfo.phones is list && data.businessInfo.phones.size() <= 20 &&
+             data.services is list && data.services.size() <= 100 &&
+             data.seo is map &&
+             data.seo.title is string && data.seo.title.size() <= 200 &&
+             data.seo.description is string && data.seo.description.size() <= 1000 &&
+             data.seo.keywords is string && data.seo.keywords.size() <= 1000;
+    }
+
+    // --- COLLECTION MATCHES ---
+    
+    // Public Content (Landing Page data)
+    match /content/{docId} {
+      allow read, write: if true;
+    }
+
+    // Admin List
+    match /admins/{userId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && isValidId(userId);
+    }
+  }
+}

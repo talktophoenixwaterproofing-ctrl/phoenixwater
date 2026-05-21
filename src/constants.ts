@@ -1,0 +1,162 @@
+import { SiteContent } from './types';
+
+export const INITIAL_CONTENT: SiteContent = {
+  businessInfo: {
+    name: "Phoenix Waterproofing Services",
+    phones: ["9901009971", "9036909037"],
+    address: "No 253 4th A cross Ganga block, Sai Sakthi layout, Bettadaspura, Bangalore - 560100",
+    email: "talktophoenixwaterproofing@gmail.com",
+  },
+  seo: {
+    title: 'Phoenix Waterproofing | Best Waterproofing Services in Bangalore',
+    description: 'Looking for the best waterproofing services in Bangalore? Phoenix Waterproofing offers expert solutions for terrace, basement, roof, and bathroom leakage problems with 10-year warranties.',
+    keywords: 'waterproofing services in bangalore, best waterproofing contractors in bangalore, terrace waterproofing bangalore, roof leakage repair, basement waterproofing, bathroom leakage solutions bangalore',
+  },
+  services: [
+    { 
+      id: '1', 
+      name: "Crack Filling", 
+      description: "Expert repair of structural and surface cracks to prevent water seepage.", 
+      icon: 'Droplets',
+      image: 'https://images.unsplash.com/photo-1590053132232-6f607474bc93?auto=format&fit=crop&q=80&w=800',
+      technicalDetails: "Commonly fixed using High-Pressure Epoxy Injection or Polyurethane (PU) grouting. For surface cracks, we use polymer-modified mortar and reinforcing fiber mesh to ensure flexible bonding."
+    },
+    { 
+      id: '2', 
+      name: "Terrace Waterproofing", 
+      description: "Comprehensive roof and terrace protection against heavy rains and weathering.", 
+      icon: 'Home',
+      image: 'https://images.unsplash.com/photo-1635339665969-95995f324dcd?auto=format&fit=crop&q=80&w=800',
+      technicalDetails: "Primary solutions include APP (Atactic Polypropylene) Bituminous Membranes or multi-coat Liquid Applied Membranes (LAM). In India, we often use Heat Reflective Coatings over the waterproofing layer to reduce indoor temperatures."
+    },
+    { 
+      id: '3', 
+      name: "Basement Waterproofing", 
+      description: "Specialized solutions for damp basements and underground water pressure.", 
+      icon: 'ShieldAlert',
+      image: 'https://images.unsplash.com/photo-1594913785162-e6785002ba33?auto=format&fit=crop&q=80&w=800',
+      technicalDetails: "We employ Crystalline Waterproofing technology which reacts with moisture to form non-soluble crystals in concrete pores. For external walls, we use EPDM or HDPE membranes to create a permanent barrier against ground water."
+    },
+    { 
+      id: '4', 
+      name: "Garden Waterproofing", 
+      description: "Protect your structure while maintaining beautiful terrace gardens and landscaping.", 
+      icon: 'Flower2',
+      technicalDetails: "Requires heavy-duty Root Barrier membranes. We use 7-layer treatment including drainage cells, geo-textile filters, and chemical-resistant coatings to prevent root penetration and dampness."
+    },
+    { 
+      id: '5', 
+      name: "Slope Roof Waterproofing", 
+      description: "Efficient drainage and sealing for angled roofing systems.", 
+      icon: 'Navigation',
+      technicalDetails: "Commonly addressed with acrylic-based high-build flexible coatings and reinforced with glass fiber mesh at joints and valleys."
+    },
+    { 
+      id: '6', 
+      name: "STP & Water Tanks", 
+      description: "Food-grade and heavy-duty coatings for water storage and treatment plants.", 
+      icon: 'Waves',
+      technicalDetails: "We utilize Food-Grade Epoxy or Crystalline coatings approved for potable water. For STPs, chemical-resistant coal-tar epoxy is used to prevent degradation from effluent waste."
+    },
+    { 
+      id: '7', 
+      name: "External Waterproofing", 
+      description: "Wall coatings and seals to protect your building's exterior envelope.", 
+      icon: 'Layout',
+      technicalDetails: "Application of Elastomeric paint and crack-bridging primers. This is crucial in Bangalore's climate to prevent fungal growth and damp patches on interior walls."
+    },
+    { 
+      id: '8', 
+      name: "Duct Waterproofing", 
+      description: "Precise sealing for HVAC and plumbing ducts to prevent internal leaks.", 
+      icon: 'Wind',
+      technicalDetails: "Utilizes flexible PU-sealants and UV-resistant coatings to handle thermal expansion and contraction in duct systems."
+    },
+    { 
+      id: '9', 
+      name: "Expansion Joints Treatment", 
+      description: "Flexible and durable sealing for building movement and expansion joints.", 
+      icon: 'Maximize2',
+      technicalDetails: "Fixed using TPE (Thermoplastic Elastomer) tapes and high-movement PU sealants to accommodate structural shifts without leaking."
+    },
+    { 
+      id: '10', 
+      name: "Retaining Walls Coatings", 
+      description: "Heavy-duty protection for structural walls against earth and moisture pressure.", 
+      icon: 'Database',
+      technicalDetails: "Application of bituminous coal-tar coatings or HDPE dimpled membranes to ensure positive side waterproofing against earth pressure."
+    },
+    { 
+      id: '11', 
+      name: "Bathrooms Waterproofing", 
+      description: "Leak-proof solutions for wet areas using advanced membrane systems.", 
+      icon: 'Bath',
+      technicalDetails: "We apply a 'Box-Type' waterproofing method in sunken portions using SBR-latex modified cementitious slurries and specialized pipe-collar seals."
+    },
+    { 
+      id: '12', 
+      name: "Tiles Epoxy Grouting", 
+      description: "Chemical-resistant and waterproof grouting for long-lasting tile installations.", 
+      icon: 'Grid',
+      technicalDetails: "Removal of old grout and replacing with 3-component Epoxy Grout which is stain-proof, waterproof, and highly durable for wet floors."
+    }
+  ],
+  pastWorks: [
+    {
+      id: 'p1',
+      title: "Commercial Terrace Proofing",
+      category: "Terrace Waterproofing",
+      imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      id: 'p2',
+      title: "Basement Polyurethane Grouting",
+      category: "Basement Waterproofing",
+      imageUrl: "https://images.unsplash.com/photo-1590053132232-6f607474bc93?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      id: 'p3',
+      title: "Sunken Portion Treatment",
+      category: "Bathroom Waterproofing",
+      imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      id: 'p4',
+      title: "Terrace Garden Root Protection",
+      category: "Garden Waterproofing",
+      imageUrl: "https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      id: 'p5',
+      title: "Building Renovation & Construction",
+      category: "Project Site & Structural Restoration, 2024",
+      imageUrl: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800"
+    }
+  ],
+  testimonials: [
+    {
+      id: 't1',
+      name: "Rajesh Kumar",
+      role: "Managing Director, RK Builders & Developers",
+      comment: "Phoenix Waterproofing solved a chronic basement leakage issue in our luxury residential tower that three other contractors failed to fix. Their engineering-first approach is highly commendable.",
+      rating: 5,
+      photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      id: 't2',
+      name: "Sarah Fernandes",
+      role: "Homeowner, Whitefield Villa",
+      comment: "I opted for their Terrace Waterproofing service with a 10-year warranty. The diagnostic team was extremely professional, mapped the leakages using thermal scanners, and completed the work cleanly. Highly recommended!",
+      rating: 5,
+      photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      id: 't3',
+      name: "Anand Sen",
+      role: "Facility Head, Tech Park Bangalore",
+      comment: "Their expansion joint treatment and water tank epoxy grouting were done with absolute precision. Minimal disruption to our campus activities and highly professional team.",
+      rating: 5,
+      photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
+    }
+  ]
+};
