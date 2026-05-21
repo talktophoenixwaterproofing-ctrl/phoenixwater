@@ -51,6 +51,9 @@ function handleFirestoreError(error: any, operationType: OperationType, path: st
 
 const CONTENT_PATH = 'content/site';
 const STORAGE_KEY = 'phoenix_waterproofing_site_content';
+const GITHUB_OWNER = 'talktophoenixwaterproofing-ctrl';
+const GITHUB_REPO = 'phoenixwater';
+const GITHUB_PATH = 'public/content.json';
 
 function getLocalContent(): SiteContent {
   try {
@@ -86,7 +89,28 @@ function saveLocalContent(content: SiteContent): void {
 }
 
 export async function getSiteContent(): Promise<SiteContent | null> {
-  if (isDummy) {
+  // First, always attempt to fetch latest deployed static content.json
+  try {
+    const res = await fetch(`/content.json?t=${Date.now()}`);
+    if (res.ok) {
+      const parsed = await res.json();
+      const merged = {
+        ...INITIAL_CONTENT,
+        ...parsed,
+        businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(parsed.businessInfo || {}) },
+        seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
+        services: parsed.services || INITIAL_CONTENT.services,
+        pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
+        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+      };
+      saveLocalContent(merged);
+      return merged;
+    }
+  } catch (e) {
+    console.warn("Static content.json load failed, using fallbacks:", e);
+  }
+
+  if (isDummy || import.meta.env.VITE_GITHUB_TOKEN) {
     return getLocalContent();
   }
 
@@ -108,6 +132,55 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
   // Always save to LocalStorage first to guarantee persistence
   saveLocalContent(content);
   
+  const githubToken = import.meta.env.VITE_GITHUB_TOKEN;
+  if (githubToken) {
+    console.log("Git-CMS mode detected. Committing changes directly to GitHub...");
+    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+    const headers = {
+      'Authorization': `token ${githubToken}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    };
+
+    try {
+      // 1. Fetch current file SHA
+      const getRes = await fetch(url, { headers });
+      let sha = '';
+      if (getRes.status === 200) {
+        const fileData = await getRes.json();
+        sha = fileData.sha;
+      }
+
+      // 2. Commit updated JSON content
+      const contentStr = JSON.stringify(content, null, 2);
+      // UTF-8 base64 encoding
+      const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
+
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          message: 'CMS updates committed via Admin Console',
+          content: base64Content,
+          sha: sha || undefined,
+          branch: 'main'
+        })
+      });
+
+      if (putRes.status === 200 || putRes.status === 201) {
+        console.log('Successfully committed site content to GitHub!');
+      } else {
+        const errData = await putRes.json();
+        console.warn('GitHub API commit failed:', errData);
+        throw new Error(errData.message || 'GitHub commit failed');
+      }
+    } catch (error) {
+      console.error('Error committing changes to GitHub:', error);
+      throw error;
+    }
+    return;
+  }
+
   if (isDummy) {
     return;
   }
@@ -117,18 +190,44 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
     await setDoc(docRef, content);
   } catch (error) {
     console.warn('Firestore WRITE failed, local fallback was successful:', error);
-    // Do not throw an error if we successfully persisted to LocalStorage
   }
 }
 
 export function subscribeToContent(onUpdate: (content: SiteContent) => void) {
-  // Seed with LocalStorage content immediately to avoid empty states or loading lag
-  const initialLocal = getLocalContent();
-  if (initialLocal) {
-    onUpdate(initialLocal);
-  }
+  // First, always load content.json statically
+  const loadStatic = async () => {
+    try {
+      const res = await fetch(`/content.json?t=${Date.now()}`);
+      if (res.ok) {
+        const parsed = await res.json();
+        const merged = {
+          ...INITIAL_CONTENT,
+          ...parsed,
+          businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(parsed.businessInfo || {}) },
+          seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
+          services: parsed.services || INITIAL_CONTENT.services,
+          pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
+          testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+        };
+        saveLocalContent(merged);
+        onUpdate(merged);
+        return;
+      }
+    } catch (e) {
+      console.warn("Failed to fetch static content.json, falling back to LocalStorage:", e);
+    }
+    
+    // Seed with LocalStorage content immediately if fetch fails
+    const initialLocal = getLocalContent();
+    if (initialLocal) {
+      onUpdate(initialLocal);
+    }
+  };
 
-  if (isDummy) {
+  loadStatic();
+
+  const hasGitCms = !!import.meta.env.VITE_GITHUB_TOKEN;
+  if (hasGitCms || isDummy) {
     return () => {};
   }
 
