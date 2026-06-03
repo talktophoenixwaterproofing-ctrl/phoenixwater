@@ -72,8 +72,9 @@ export default function App() {
     try {
       await updateSiteContent(newContent);
       setContent(newContent);
-    } catch (err) {
-      alert("Failed to update content. Ensure you have admin privileges.");
+    } catch (err: any) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      alert(`Failed to update content: ${errMsg}\n\nEnsure you have admin privileges and valid environment configuration.`);
     }
   };
 

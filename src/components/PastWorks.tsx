@@ -10,6 +10,7 @@ interface PastWorksProps {
 export function PastWorksSection({ content }: PastWorksProps) {
   const pastWorks = content.pastWorks || [];
   const testimonials = content.testimonials || [];
+  const galleryImages = content.gallery || [];
 
   // Duplicate items for continuous marquee looping
   const marqueeItems = [...pastWorks, ...pastWorks, ...pastWorks];
@@ -128,17 +129,76 @@ export function PastWorksSection({ content }: PastWorksProps) {
                   alt={t.name}
                   className="w-12 h-12 rounded-2xl object-cover border border-slate-100 group-hover:border-accent/30 transition-colors shrink-0"
                 />
-                <div className="flex flex-col overflow-hidden">
-                  <h4 className="font-extrabold text-slate-900 text-sm leading-none truncate">{t.name}</h4>
-                  <p className="text-[10px] text-slate-400 font-bold tracking-tight mt-1 truncate max-w-[200px]" title={t.role}>
-                    {t.role}
-                  </p>
+                <div className="flex items-center font-bold text-slate-500 overflow-hidden">
+                  <div className="flex flex-col">
+                    <h4 className="font-extrabold text-slate-900 text-sm leading-none truncate">{t.name}</h4>
+                    <p className="text-[10px] text-slate-400 font-bold tracking-tight mt-1 truncate max-w-[200px]" title={t.role}>
+                      {t.role}
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Visual Gallery Showcase */}
+      {galleryImages.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 md:px-12 mt-32 pt-24 border-t border-slate-200/50">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mb-16">
+            <div>
+              <span className="text-accent font-bold text-xs uppercase tracking-[0.2em] mb-4 block">
+                Visual Showcase
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                Project Gallery
+              </h2>
+            </div>
+            <a 
+              href="/gallery"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/gallery');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="px-6 py-3.5 bg-slate-900 hover:bg-accent text-white font-bold text-sm rounded-full transition-all shadow-lg hover:shadow-accent/20 active:scale-95 flex items-center gap-2 group shrink-0 w-max"
+            >
+              <span>Launch Slideshow</span>
+              <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {galleryImages.slice(0, 8).map((imgUrl, idx) => (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.05 }}
+                key={idx}
+                onClick={() => {
+                  window.history.pushState({}, '', '/gallery');
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }}
+                className="aspect-square rounded-[2rem] overflow-hidden border border-slate-200/60 shadow-md group relative cursor-pointer"
+              >
+                <img 
+                  src={getGoogleDriveEmbedUrl(imgUrl)} 
+                  alt={`Gallery work ${idx + 1}`}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 transition-colors flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity scale-90 group-hover:scale-100 duration-300">
+                    <ArrowUpRight size={18} />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
