@@ -146,27 +146,27 @@
   "testimonials": [
     {
       "id": "t1",
-      "name": "Rajesh Kumar",
+      "name": "Puleru Punith",
       "role": "Managing Director, RK Builders & Developers",
       "comment": "Phoenix Waterproofing solved a chronic basement leakage issue in our luxury residential tower that three other contractors failed to fix. Their engineering-first approach is highly commendable.",
       "rating": 5,
-      "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+      "photoUrl": "https://lh3.googleusercontent.com/d/1zXB1pEqKCKvq9Kpn-fH3XbGgYupdL2MS"
     },
     {
       "id": "t2",
-      "name": "Sarah Fernandes",
+      "name": "Sonika Thondamanati",
       "role": "Homeowner, Whitefield Villa",
       "comment": "I opted for their Terrace Waterproofing service with a 10-year warranty. The diagnostic team was extremely professional, mapped the leakages using thermal scanners, and completed the work cleanly. Highly recommended!",
-      "rating": 5,
-      "photoUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
+      "rating": 4,
+      "photoUrl": "https://lh3.googleusercontent.com/d/18FrH63yN9QEbx4R9OfrRNh6ntimd2iPe"
     },
     {
       "id": "t3",
-      "name": "Anand Sen",
+      "name": "Mohan Reddy",
       "role": "Facility Head, Tech Park Bangalore",
       "comment": "Their expansion joint treatment and water tank epoxy grouting were done with absolute precision. Minimal disruption to our campus activities and highly professional team.",
       "rating": 5,
-      "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
+      "photoUrl": "https://lh3.googleusercontent.com/d/1hK2lQzuRg9fmgdTiOdc0mq8VWbiFj3WG"
     }
   ],
   "gallery": [
@@ -174,5 +174,5 @@
     "https://lh3.googleusercontent.com/d/1F4CH9NrGyKFvLZIKWvo-iE6SFvpVesqC",
     "https://lh3.googleusercontent.com/d/19xBZfuLqrD4hg6pJcC3VTYc6KclKKL9P"
   ],
-  "updatedAt": 1780507562338
+  "updatedAt": 1780507869349
 }
