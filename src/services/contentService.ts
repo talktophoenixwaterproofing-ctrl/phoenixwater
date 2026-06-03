@@ -89,7 +89,52 @@ function saveLocalContent(content: SiteContent): void {
   }
 }
 
+async function fetchFromGitHub(token: string): Promise<any> {
+  const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}?ref=main&t=${Date.now()}`;
+  const headers = {
+    'Authorization': `token ${token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Cache-Control': 'no-cache'
+  };
+
+  const res = await fetch(url, { headers });
+  if (res.status === 200) {
+    const fileData = await res.json();
+    if (fileData.content) {
+      // Decode base64 content
+      const contentStr = decodeURIComponent(escape(atob(fileData.content.replace(/\s/g, ''))));
+      return JSON.parse(contentStr);
+    }
+  }
+  return null;
+}
+
 export async function getSiteContent(): Promise<SiteContent | null> {
+  const githubToken = import.meta.env.VITE_GITHUB_TOKEN;
+  const isAdminPath = typeof window !== 'undefined' && window.location.pathname === '/admin';
+
+  if (githubToken && isAdminPath) {
+    try {
+      const parsed = await fetchFromGitHub(githubToken);
+      if (parsed) {
+        const merged = {
+          ...INITIAL_CONTENT,
+          ...parsed,
+          businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(parsed.businessInfo || {}) },
+          seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
+          services: parsed.services || INITIAL_CONTENT.services,
+          pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
+          testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials,
+          updatedAt: parsed.updatedAt || 0
+        };
+        saveLocalContent(merged);
+        return merged;
+      }
+    } catch (e) {
+      console.warn("Failed to fetch latest content from GitHub, falling back:", e);
+    }
+  }
+
   // First, always attempt to fetch latest deployed static content.json
   try {
     const res = await fetch(`/content.json?t=${Date.now()}`);
@@ -219,12 +264,26 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
 }
 
 export function subscribeToContent(onUpdate: (content: SiteContent) => void) {
+  const githubToken = import.meta.env.VITE_GITHUB_TOKEN;
+  const isAdminPath = typeof window !== 'undefined' && window.location.pathname === '/admin';
+
   // First, always load content.json statically
   const loadStatic = async () => {
     try {
-      const res = await fetch(`/content.json?t=${Date.now()}`);
-      if (res.ok) {
-        const parsed = await res.json();
+      let parsed: any = null;
+
+      if (githubToken && isAdminPath) {
+        parsed = await fetchFromGitHub(githubToken);
+      }
+
+      if (!parsed) {
+        const res = await fetch(`/content.json?t=${Date.now()}`);
+        if (res.ok) {
+          parsed = await res.json();
+        }
+      }
+
+      if (parsed) {
         const merged = {
           ...INITIAL_CONTENT,
           ...parsed,
