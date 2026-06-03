@@ -116,63 +116,65 @@
       "id": "p1",
       "title": "Commercial Terrace Proofing",
       "category": "Terrace Waterproofing",
-      "imageUrl": "https://as2.ftcdn.net/v2/jpg/08/83/92/23/1000_F_883922336_E7ylGaNYQox7cfeYphg0TJZ0zj4cQi2Q.jpg"
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"
     },
     {
       "id": "p2",
       "title": "Basement Polyurethane Grouting",
       "category": "Basement Waterproofing",
-      "imageUrl": "https://www.baumerk.com/storage/app/media/blog/gorsel-iyilestirme/poliueretan/firca-ile-surulen-yalitim.jpg"
+      "imageUrl": "https://images.unsplash.com/photo-1590053132232-6f607474bc93?auto=format&fit=crop&q=80&w=800"
     },
     {
       "id": "p3",
       "title": "Sunken Portion Treatment",
       "category": "Bathroom Waterproofing",
-      "imageUrl": "https://images.jdmagicbox.com/comp/def_content/waterproofing-contractors/shutterstock-1043528755-waterproofing-contractors-11-yf2dj.jpg"
+      "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800"
     },
     {
       "id": "p4",
       "title": "Terrace Garden Root Protection",
       "category": "Garden Waterproofing",
-      "imageUrl": "https://shouryawaterproofingsolutions.com/wp-content/uploads/2023/12/11-657d0d02a81e6.webp"
+      "imageUrl": "https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?auto=format&fit=crop&q=80&w=800"
     },
     {
       "id": "p5",
       "title": "Building Renovation & Construction",
       "category": "Project Site & Structural Restoration, 2024",
-      "imageUrl": "https://mccoymart.com/post/wp-content/uploads/5-Key-Factors-to-Consider-When-Hiring-a-Building-Contractor.jpg"
+      "imageUrl": "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800"
     }
   ],
   "testimonials": [
     {
       "id": "t1",
-      "name": "Rajesh Kumar",
+      "name": "Rajesh Reddy",
       "role": "Managing Director, RK Builders & Developers",
       "comment": "Phoenix Waterproofing solved a chronic basement leakage issue in our luxury residential tower that three other contractors failed to fix. Their engineering-first approach is highly commendable.",
-      "rating": 5,
+      "rating": 4,
       "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
     },
     {
       "id": "t2",
-      "name": "Sarah Fernandes",
-      "role": "Homeowner, Whitefield Villa",
+      "name": "Sonika Thondamanati",
+      "role": "Homeowner, Sai Shakthi Layout",
       "comment": "I opted for their Terrace Waterproofing service with a 10-year warranty. The diagnostic team was extremely professional, mapped the leakages using thermal scanners, and completed the work cleanly. Highly recommended!",
       "rating": 5,
       "photoUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
     },
     {
       "id": "t3",
-      "name": "Anand Sen",
+      "name": "Mohan Reddy",
       "role": "Facility Head, Tech Park Bangalore",
       "comment": "Their expansion joint treatment and water tank epoxy grouting were done with absolute precision. Minimal disruption to our campus activities and highly professional team.",
-      "rating": 5,
+      "rating": 4,
       "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
     }
   ],
   "gallery": [
-    "https://lh3.googleusercontent.com/d/1HOasPQmexV5q50txM9zAaRuBRGSgBKMO",
-    "https://lh3.googleusercontent.com/d/1F4CH9NrGyKFvLZIKWvo-iE6SFvpVesqC",
-    "https://lh3.googleusercontent.com/d/19xBZfuLqrD4hg6pJcC3VTYc6KclKKL9P"
+    "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1590053132232-6f607474bc93?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200"
   ],
-  "updatedAt": 1780485341646
+  "updatedAt": 1780493020717
 }
