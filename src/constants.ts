@@ -42,6 +42,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Garden Waterproofing", 
       description: "Protect your structure while maintaining beautiful terrace gardens and landscaping.", 
       icon: 'Flower2',
+      image: 'https://images.unsplash.com/photo-1530745342582-0795f23ec976?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Requires heavy-duty Root Barrier membranes. We use 7-layer treatment including drainage cells, geo-textile filters, and chemical-resistant coatings to prevent root penetration and dampness."
     },
     { 
@@ -49,6 +50,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Slope Roof Waterproofing", 
       description: "Efficient drainage and sealing for angled roofing systems.", 
       icon: 'Navigation',
+      image: 'https://images.unsplash.com/photo-1608303588026-884930df2ae1?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Commonly addressed with acrylic-based high-build flexible coatings and reinforced with glass fiber mesh at joints and valleys."
     },
     { 
@@ -56,6 +58,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "STP & Water Tanks", 
       description: "Food-grade and heavy-duty coatings for water storage and treatment plants.", 
       icon: 'Waves',
+      image: 'https://images.unsplash.com/photo-1542332213-9b5a5a3fab35?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "We utilize Food-Grade Epoxy or Crystalline coatings approved for potable water. For STPs, chemical-resistant coal-tar epoxy is used to prevent degradation from effluent waste."
     },
     { 
@@ -63,6 +66,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "External Waterproofing", 
       description: "Wall coatings and seals to protect your building's exterior envelope.", 
       icon: 'Layout',
+      image: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Application of Elastomeric paint and crack-bridging primers. This is crucial in Bangalore's climate to prevent fungal growth and damp patches on interior walls."
     },
     { 
@@ -70,6 +74,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Duct Waterproofing", 
       description: "Precise sealing for HVAC and plumbing ducts to prevent internal leaks.", 
       icon: 'Wind',
+      image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Utilizes flexible PU-sealants and UV-resistant coatings to handle thermal expansion and contraction in duct systems."
     },
     { 
@@ -77,6 +82,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Expansion Joints Treatment", 
       description: "Flexible and durable sealing for building movement and expansion joints.", 
       icon: 'Maximize2',
+      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Fixed using TPE (Thermoplastic Elastomer) tapes and high-movement PU sealants to accommodate structural shifts without leaking."
     },
     { 
@@ -84,6 +90,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Retaining Walls Coatings", 
       description: "Heavy-duty protection for structural walls against earth and moisture pressure.", 
       icon: 'Database',
+      image: 'https://images.unsplash.com/photo-1534710961216-75c9d402f03e?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Application of bituminous coal-tar coatings or HDPE dimpled membranes to ensure positive side waterproofing against earth pressure."
     },
     { 
@@ -91,6 +98,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Bathrooms Waterproofing", 
       description: "Leak-proof solutions for wet areas using advanced membrane systems.", 
       icon: 'Bath',
+      image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "We apply a 'Box-Type' waterproofing method in sunken portions using SBR-latex modified cementitious slurries and specialized pipe-collar seals."
     },
     { 
@@ -98,6 +106,7 @@ export const INITIAL_CONTENT: SiteContent = {
       name: "Tiles Epoxy Grouting", 
       description: "Chemical-resistant and waterproof grouting for long-lasting tile installations.", 
       icon: 'Grid',
+      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=800',
       technicalDetails: "Removal of old grout and replacing with 3-component Epoxy Grout which is stain-proof, waterproof, and highly durable for wet floors."
     }
   ],
@@ -158,5 +167,12 @@ export const INITIAL_CONTENT: SiteContent = {
       rating: 5,
       photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
     }
+  ],
+  gallery: [
+    "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1590053132232-6f607474bc93?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200",
+    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200"
   ]
 };

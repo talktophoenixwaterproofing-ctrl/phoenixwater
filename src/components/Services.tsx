@@ -122,63 +122,6 @@ export function ServicesSection({ content }: ServicesSectionProps) {
         ))}
       </div>
 
-      {/* Gallery of Work Section */}
-      <div className="mt-32 pt-24 border-t border-slate-100">
-        <div className="mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-accent font-bold text-xs uppercase tracking-[0.2em] mb-4 block"
-          >
-            Proof of Excellence
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            Gallery of Recent Projects
-          </motion.h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {content.services.filter(s => s.image).map((service, idx) => (
-            <motion.div
-              key={`gallery-${service.id}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="group relative h-80 rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-100"
-            >
-              <img 
-                src={getImageUrl(service.image)} 
-                alt={service.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                <div className="flex items-center gap-3 mb-2">
-                   <div className="p-2 bg-accent/20 backdrop-blur-md rounded-lg text-white">
-                      {(Icons as any)[service.icon] ? (
-                        React.createElement((Icons as any)[service.icon], { size: 16 })
-                      ) : (
-                        <Icons.Shield size={16} />
-                      )}
-                   </div>
-                   <span className="text-white text-sm font-extrabold tracking-tight">Project: {service.name}</span>
-                </div>
-                <p className="text-slate-300 text-xs font-medium line-clamp-2 max-w-xs">
-                  {service.technicalDetails?.substring(0, 80)}...
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
       {/* Technical Details Modal */}
       <AnimatePresence>
         {selectedService && (

@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { Save, X, Plus, Trash2, Home, Settings, Info, Briefcase, Phone, MapPin, Mail, LogOut, ShieldCheck, LogIn, Globe, Layers, Star } from 'lucide-react';
+import { Save, X, Plus, Trash2, Home, Settings, Info, Briefcase, Phone, MapPin, Mail, LogOut, ShieldCheck, LogIn, Globe, Layers, Star, Image as ImageIcon } from 'lucide-react';
 import { SiteContent, Service, SEOContent, PastWork, Testimonial } from '../types';
 import { getGoogleDriveEmbedUrl } from '../lib/imageUtils';
 
@@ -12,12 +12,33 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps) {
   const [editedContent, setEditedContent] = useState<SiteContent>(JSON.parse(JSON.stringify(content)));
-  const [activeTab, setActiveTab] = useState<'info' | 'services' | 'pastWorks' | 'testimonials' | 'seo'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'services' | 'pastWorks' | 'testimonials' | 'seo' | 'gallery'>('info');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleGalleryChange = (index: number, value: string) => {
+    const processedValue = getGoogleDriveEmbedUrl(value);
+    const newGallery = [...(editedContent.gallery || [])];
+    newGallery[index] = processedValue;
+    setEditedContent({ ...editedContent, gallery: newGallery });
+  };
+
+  const handleAddGalleryItem = () => {
+    setEditedContent({ 
+      ...editedContent, 
+      gallery: [...(editedContent.gallery || []), 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800'] 
+    });
+  };
+
+  const handleRemoveGalleryItem = (index: number) => {
+    setEditedContent({ 
+      ...editedContent, 
+      gallery: (editedContent.gallery || []).filter((_, idx) => idx !== index) 
+    });
+  };
 
   const handlePastWorkChange = (id: string, field: keyof PastWork, value: string) => {
     const processedValue = field === 'imageUrl' ? getGoogleDriveEmbedUrl(value) : value;
@@ -202,7 +223,7 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-bold transition-all ${activeTab === 'pastWorks' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}
           >
             <Layers size={20} />
-            Past Works
+            Portfolio
           </button>
           <button 
             onClick={() => setActiveTab('testimonials')}
@@ -210,6 +231,13 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
           >
             <Star size={20} />
             Testimonials
+          </button>
+          <button 
+            onClick={() => setActiveTab('gallery')}
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-bold transition-all ${activeTab === 'gallery' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}
+          >
+            <ImageIcon size={20} />
+            Gallery Stack
           </button>
           <button 
             onClick={() => setActiveTab('seo')}
@@ -263,8 +291,9 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
             <h1 className="text-4xl font-extrabold mb-3 tracking-tight">
               {activeTab === 'info' ? 'Corporate Profile' : 
                activeTab === 'services' ? 'Technical Offerings' : 
-               activeTab === 'pastWorks' ? 'Completed Work Projects' : 
+               activeTab === 'pastWorks' ? 'Portfolio Projects' : 
                activeTab === 'testimonials' ? 'Client Testimonials' : 
+               activeTab === 'gallery' ? 'Auto-Slide Gallery' :
                'SEO Optimizer'}
             </h1>
             <p className="text-slate-400 text-base font-medium">Configure global site variables and metadata.</p>
@@ -573,6 +602,61 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
               >
                 <Plus size={28} />
                 <span className="text-sm tracking-widest uppercase">Inject New Client Testimonial</span>
+              </button>
+            </div>
+          ) : activeTab === 'gallery' ? (
+            <div className="space-y-6">
+              <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl mb-8 flex items-center gap-4 text-slate-500 text-sm font-medium leading-relaxed">
+                <ImageIcon size={32} className="text-accent shrink-0" />
+                <p>
+                  Manage the image slides in your website's automatic slideshow gallery. Paste any direct image URL, or standard Google Drive sharing links (which are auto-translated for embed display).
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {(editedContent.gallery || []).map((imgUrl, idx) => (
+                  <div key={idx} className="p-6 bg-slate-50 border border-slate-100 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner flex items-center justify-center relative">
+                      {imgUrl ? (
+                        <img 
+                          src={imgUrl} 
+                          alt={`Gallery Preview ${idx + 1}`} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <ImageIcon size={36} className="text-slate-300" />
+                      )}
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                      <input 
+                        type="text"
+                        className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
+                        placeholder="Paste image URL here..."
+                        value={imgUrl}
+                        onChange={(e) => handleGalleryChange(idx, e.target.value)}
+                      />
+                      <button 
+                        onClick={() => handleRemoveGalleryItem(idx)}
+                        className="p-3 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                        title="Delete Photo"
+                      >
+                        <Trash2 size={18}/>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button 
+                onClick={handleAddGalleryItem}
+                className="w-full py-10 border-2 border-dashed border-slate-200 rounded-[2rem] text-slate-400 hover:border-accent/40 hover:text-accent font-extrabold flex items-center justify-center gap-3 transition-all bg-slate-50/50 hover:bg-accent/5 mt-4"
+              >
+                <Plus size={24} />
+                <span className="text-xs tracking-widest uppercase">Add Slide Photo URL</span>
               </button>
             </div>
           ) : (

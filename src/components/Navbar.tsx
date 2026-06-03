@@ -18,7 +18,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-10">
-          {['Services', 'Past Works', 'About', 'Contact'].map((item) => (
+          {['Services', 'Portfolio', 'About', 'Contact'].map((item) => (
             <a 
               key={item}
               href={`#${item.toLowerCase().replace(' ', '-')}`} 
@@ -27,6 +27,17 @@ export function Navbar() {
               {item}
             </a>
           ))}
+          <a 
+            href="/gallery"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.pushState({}, '', '/gallery');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="text-sm font-semibold text-slate-500 hover:text-accent transition-colors"
+          >
+            Gallery
+          </a>
         </div>
 
         <div className="flex items-center gap-3">

@@ -44,4 +44,6 @@ export interface SiteContent {
   seo: SEOContent;
   pastWorks?: PastWork[];
   testimonials?: Testimonial[];
+  updatedAt?: number;
+  gallery?: string[];
 }

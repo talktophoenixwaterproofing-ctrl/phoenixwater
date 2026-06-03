@@ -47,7 +47,19 @@ export function Footer({ content }: FooterProps) {
             <ul className="space-y-4 text-slate-600 font-bold text-sm">
               <li><a href="#" className="hover:text-accent transition-colors">Quality Control</a></li>
               <li><a href="#" className="hover:text-accent transition-colors">Safety Protocols</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Project Portfolio</a></li>
+              <li>
+                <a 
+                  href="/gallery"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/gallery');
+                    window.dispatchEvent(new PopStateEvent('popstate'));
+                  }}
+                  className="hover:text-accent transition-colors"
+                >
+                  Project Portfolio
+                </a>
+              </li>
               <li><a href="#contact" className="hover:text-accent transition-colors">Join Team</a></li>
             </ul>
           </div>

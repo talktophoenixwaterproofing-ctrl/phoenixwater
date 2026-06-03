@@ -68,7 +68,8 @@ function getLocalContent(): SiteContent {
         seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
         services: parsed.services || INITIAL_CONTENT.services,
         pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
-        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials,
+        updatedAt: parsed.updatedAt
       };
     }
     // Seed localStorage on very first visit
@@ -101,8 +102,16 @@ export async function getSiteContent(): Promise<SiteContent | null> {
         seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
         services: parsed.services || INITIAL_CONTENT.services,
         pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
-        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+        testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials,
+        updatedAt: parsed.updatedAt || 0
       };
+
+      const local = getLocalContent();
+      // Skip overwrite if local content has a newer timestamp
+      if (local && local.updatedAt && merged.updatedAt && local.updatedAt > merged.updatedAt) {
+        return local;
+      }
+
       saveLocalContent(merged);
       return merged;
     }
@@ -119,8 +128,19 @@ export async function getSiteContent(): Promise<SiteContent | null> {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data() as SiteContent;
-      saveLocalContent(data);
-      return data;
+      // Clean merge to prevent schema drift crashes
+      const mergedData = {
+        ...INITIAL_CONTENT,
+        ...data,
+        businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(data.businessInfo || {}) },
+        seo: { ...INITIAL_CONTENT.seo, ...(data.seo || {}) },
+        services: data.services || INITIAL_CONTENT.services,
+        pastWorks: data.pastWorks || INITIAL_CONTENT.pastWorks,
+        testimonials: data.testimonials || INITIAL_CONTENT.testimonials,
+        updatedAt: data.updatedAt
+      };
+      saveLocalContent(mergedData);
+      return mergedData;
     }
   } catch (error) {
     console.warn('Firestore GET failed, falling back to LocalStorage:', error);
@@ -129,8 +149,13 @@ export async function getSiteContent(): Promise<SiteContent | null> {
 }
 
 export async function updateSiteContent(content: SiteContent): Promise<void> {
+  const contentWithTimestamp = {
+    ...content,
+    updatedAt: Date.now()
+  };
+
   // Always save to LocalStorage first to guarantee persistence
-  saveLocalContent(content);
+  saveLocalContent(contentWithTimestamp);
   
   const githubToken = import.meta.env.VITE_GITHUB_TOKEN;
   if (githubToken) {
@@ -152,7 +177,7 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
       }
 
       // 2. Commit updated JSON content
-      const contentStr = JSON.stringify(content, null, 2);
+      const contentStr = JSON.stringify(contentWithTimestamp, null, 2);
       // UTF-8 base64 encoding
       const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
 
@@ -187,7 +212,7 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
 
   try {
     const docRef = doc(db, CONTENT_PATH);
-    await setDoc(docRef, content);
+    await setDoc(docRef, contentWithTimestamp);
   } catch (error) {
     console.warn('Firestore WRITE failed, local fallback was successful:', error);
   }
@@ -207,8 +232,17 @@ export function subscribeToContent(onUpdate: (content: SiteContent) => void) {
           seo: { ...INITIAL_CONTENT.seo, ...(parsed.seo || {}) },
           services: parsed.services || INITIAL_CONTENT.services,
           pastWorks: parsed.pastWorks || INITIAL_CONTENT.pastWorks,
-          testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials
+          testimonials: parsed.testimonials || INITIAL_CONTENT.testimonials,
+          updatedAt: parsed.updatedAt || 0
         };
+
+        const local = getLocalContent();
+        // Skip overwrite if local content has a newer timestamp
+        if (local && local.updatedAt && merged.updatedAt && local.updatedAt > merged.updatedAt) {
+          onUpdate(local);
+          return;
+        }
+
         saveLocalContent(merged);
         onUpdate(merged);
         return;
@@ -224,9 +258,21 @@ export function subscribeToContent(onUpdate: (content: SiteContent) => void) {
     }
   };
 
-  loadStatic();
-
   const hasGitCms = !!import.meta.env.VITE_GITHUB_TOKEN;
+  const isFirestoreMode = !isDummy && !hasGitCms;
+
+  if (isFirestoreMode) {
+    // Load local content immediately
+    const local = getLocalContent();
+    if (local) {
+      onUpdate(local);
+    } else {
+      loadStatic();
+    }
+  } else {
+    loadStatic();
+  }
+
   if (hasGitCms || isDummy) {
     return () => {};
   }
@@ -236,8 +282,26 @@ export function subscribeToContent(onUpdate: (content: SiteContent) => void) {
     const unsubscribe = onSnapshot(docRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.data() as SiteContent;
-        saveLocalContent(data);
-        onUpdate(data);
+        // Clean merge with INITIAL_CONTENT to prevent schema drift crashes
+        const mergedData = {
+          ...INITIAL_CONTENT,
+          ...data,
+          businessInfo: { ...INITIAL_CONTENT.businessInfo, ...(data.businessInfo || {}) },
+          seo: { ...INITIAL_CONTENT.seo, ...(data.seo || {}) },
+          services: data.services || INITIAL_CONTENT.services,
+          pastWorks: data.pastWorks || INITIAL_CONTENT.pastWorks,
+          testimonials: data.testimonials || INITIAL_CONTENT.testimonials,
+          updatedAt: data.updatedAt
+        };
+
+        // Only update if Firestore content is newer or equal to local content
+        const local = getLocalContent();
+        if (local && local.updatedAt && mergedData.updatedAt && local.updatedAt > mergedData.updatedAt) {
+          return;
+        }
+
+        saveLocalContent(mergedData);
+        onUpdate(mergedData);
       } else {
         const local = getLocalContent();
         if (local) onUpdate(local);

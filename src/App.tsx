@@ -12,16 +12,25 @@ import { PastWorksSection } from './components/PastWorks';
 import { ContactSection } from './components/Contact';
 import { Footer } from './components/Footer';
 import { AdminDashboard } from './components/AdminDashboard';
+import { GalleryPage } from './components/GalleryPage';
 import { INITIAL_CONTENT } from './constants';
 import { SiteContent } from './types';
 import { subscribeToContent, updateSiteContent } from './services/contentService';
 
 export default function App() {
   const [content, setContent] = useState<SiteContent>(INITIAL_CONTENT);
-  const [isEditorOpen, setIsEditorOpen] = useState(() => window.location.pathname === '/admin');
+  const [currentView, setCurrentView] = useState<'client' | 'admin' | 'gallery'>(() => {
+    if (window.location.pathname === '/admin') return 'admin';
+    if (window.location.pathname === '/gallery') return 'gallery';
+    return 'client';
+  });
 
   useEffect(() => {
-    const handlePopState = () => setIsEditorOpen(window.location.pathname === '/admin');
+    const handlePopState = () => {
+      if (window.location.pathname === '/admin') setCurrentView('admin');
+      else if (window.location.pathname === '/gallery') setCurrentView('gallery');
+      else setCurrentView('client');
+    };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -68,15 +77,15 @@ export default function App() {
     }
   };
 
-  const closeAdmin = () => {
+  const closeView = () => {
     window.history.pushState({}, '', '/');
-    setIsEditorOpen(false);
+    setCurrentView('client');
   };
 
   return (
     <div className="relative min-h-screen overflow-x-hidden selection:bg-accent selection:text-white">
       <AnimatePresence mode="wait">
-        {isEditorOpen ? (
+        {currentView === 'admin' ? (
           <motion.div
             key="admin"
             initial={{ opacity: 0, x: 20 }}
@@ -87,7 +96,20 @@ export default function App() {
             <AdminDashboard 
               content={content} 
               onSave={handleUpdateContent} 
-              onClose={closeAdmin}
+              onClose={closeView}
+            />
+          </motion.div>
+        ) : currentView === 'gallery' ? (
+          <motion.div
+            key="gallery"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="min-h-screen bg-slate-950"
+          >
+            <GalleryPage 
+              content={content} 
+              onClose={closeView}
             />
           </motion.div>
         ) : (

@@ -15,7 +15,7 @@ export function PastWorksSection({ content }: PastWorksProps) {
   const marqueeItems = [...pastWorks, ...pastWorks, ...pastWorks];
 
   return (
-    <section id="past-works" className="py-24 bg-slate-50/50 border-y border-slate-100 overflow-hidden relative">
+    <section id="portfolio" className="py-24 bg-slate-50/50 border-y border-slate-100 overflow-hidden relative">
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
@@ -36,7 +36,7 @@ export function PastWorksSection({ content }: PastWorksProps) {
             Proven Track Record
           </span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Our Past Completions.
+            Our Completed Portfolio.
           </h2>
           <p className="text-slate-500 font-medium max-w-lg mt-4 leading-relaxed">
             Explore high-resolution highlights of our structural waterproofing projects across commercial and residential spaces in Bangalore.
