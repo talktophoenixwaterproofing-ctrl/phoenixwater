@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Save, X, Plus, Trash2, Home, Settings, Info, Briefcase, Phone, MapPin, Mail, LogOut, ShieldCheck, LogIn, Globe, Layers, Star, Image as ImageIcon } from 'lucide-react';
 import { SiteContent, Service, SEOContent, PastWork, Testimonial } from '../types';
 import { getGoogleDriveEmbedUrl } from '../lib/imageUtils';
+import { getCMSMode } from '../services/contentService';
 
 interface AdminDashboardProps {
   content: SiteContent;
@@ -18,6 +19,7 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const cmsMode = getCMSMode();
 
   const handleGalleryChange = (index: number, value: string) => {
     const processedValue = getGoogleDriveEmbedUrl(value);
@@ -263,6 +265,31 @@ export function AdminDashboard({ content, onSave, onClose }: AdminDashboardProps
             <LogOut size={14} />
             Terminate Session
           </button>
+        </div>
+
+        {/* Storage Connection Status */}
+        <div className="mt-4 p-5 rounded-[1.5rem] border bg-slate-50 border-slate-100 text-xs">
+          <div className="flex items-center gap-2.5 mb-2">
+            <span className={`w-2.5 h-2.5 rounded-full ${
+              cmsMode === 'git' ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 
+              cmsMode === 'firestore' ? 'bg-blue-500 shadow-[0_0_8px_#3b82f6]' : 
+              'bg-amber-500 animate-pulse shadow-[0_0_8px_#f59e0b]'
+            }`} />
+            <span className="font-extrabold text-slate-700">
+              {cmsMode === 'git' ? 'Connected (Git-CMS)' : 
+               cmsMode === 'firestore' ? 'Connected (Firestore)' : 
+               'Offline Mode (Local Only)'}
+            </span>
+          </div>
+          {cmsMode === 'offline' ? (
+            <p className="text-amber-600 leading-relaxed font-semibold">
+              ⚠️ Changes are saved in your current browser only. To publish globally, please configure the <strong>VITE_GITHUB_TOKEN</strong> environment variable in Vercel/Netlify.
+            </p>
+          ) : (
+            <p className="text-slate-400 leading-relaxed font-medium">
+              Changes will be saved globally to {cmsMode === 'git' ? 'GitHub' : 'Firestore'}.
+            </p>
+          )}
         </div>
 
         <div className="pt-8 border-t border-slate-100 space-y-3">

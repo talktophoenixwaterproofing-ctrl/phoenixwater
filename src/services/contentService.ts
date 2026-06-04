@@ -14,6 +14,12 @@ import { db, auth, isDummy } from '../lib/firebase';
 import { SiteContent } from '../types';
 import { INITIAL_CONTENT } from '../constants';
 
+export function getCMSMode(): 'git' | 'firestore' | 'offline' {
+  if (import.meta.env.VITE_GITHUB_TOKEN) return 'git';
+  if (!isDummy) return 'firestore';
+  return 'offline';
+}
+
 export enum OperationType {
   CREATE = 'create',
   UPDATE = 'update',
